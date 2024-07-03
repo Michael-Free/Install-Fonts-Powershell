@@ -1,3 +1,11 @@
+param (
+	[Parameter(Mandatory=$true)]
+	[string]$SourcePath,
+
+	[Parameter(Mandatory=$true)]
+	[string]$DestPath
+)
+
 function Test-Admin {
 	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
 	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
@@ -54,7 +62,6 @@ function Add-Font {
 	}
 }
 
-
 $isAdmin = Test-Admin
 $directoryPath = 'C:\Scripts\Fonts\'
 $remoteFileShare = '\\MyRemoteFile\Share\'
@@ -88,8 +95,3 @@ if ($missingFiles.count -gt 0) {
 		Copy-Item -Path "$remoteFileShare\$mf" -Destination "$directoryPath\$mf"
 	}
 }
-
-###
-# previous usage with pposhtools
-#Get-ChildItem -Path \\FileServer\Fonts\ -Directory | ForEach-Object { Add-Font -Path \\fileserver\fonts\$_ } | Out-File -Append -FilePath C:\Scripts\Font-InstallLog.txt
-###
