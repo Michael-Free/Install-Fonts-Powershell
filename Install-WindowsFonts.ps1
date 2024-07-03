@@ -19,6 +19,11 @@ class Logger {
     }
 }
 
+#$logpath = ""
+## Check Logpath
+#$logger = [Logger]::new("C:\LogFile.txt")
+#$logger.Log("Script Start")
+
 function Test-Admin {
 	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
 	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
@@ -74,8 +79,8 @@ function Add-Font {
 		}
 	}
 }
-$logger = [Logger]::new("C:\LogFile.txt")
-$logger.Log("Script Start")
+
+
 
 $isAdmin = Test-Admin
 
