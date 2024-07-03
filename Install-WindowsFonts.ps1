@@ -16,7 +16,6 @@ class Logger {
         $timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
         $logEntry = "$timestamp - $message"
         Add-Content -Path $this.LogFilePath -Value $logEntry
-        Write-Host $logEntry
     }
 }
 
@@ -75,7 +74,8 @@ function Add-Font {
 		}
 	}
 }
-
+$logger = [Logger]::new("C:\LogFile.txt")
+$logger.Log("Script Start")
 $isAdmin = Test-Admin
 $directoryPath = 'C:\Scripts\Fonts\'
 $remoteFileShare = '\\MyRemoteFile\Share\'
