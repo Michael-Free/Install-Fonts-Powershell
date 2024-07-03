@@ -5,6 +5,7 @@ param (
 	[Parameter(Mandatory=$true)]
 	[string]$DestPath
 )
+
 class Logger {
     [string]$LogFilePath
 
@@ -80,11 +81,7 @@ function Add-Font {
 	}
 }
 
-
-
-$isAdmin = Test-Admin
-
-if (-not $isAdmin) {
+if (-not (Test-Admin)) {
 	Write-Error 'Not running with Admin privileges.'
 	Exit 1
 }
