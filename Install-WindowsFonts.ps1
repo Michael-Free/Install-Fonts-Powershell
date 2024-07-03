@@ -7,51 +7,6 @@ function Test-Admin {
 	return $isAdmin
 }
 
-#function Install-NuGetPackageProvider {
-#	param (
-#		[string]$ProviderName = 'NuGet',
-#		[string]$MinimumVersion = '2.8.5.201',
-#		[switch]$Confirm = $false,
-#		[switch]$Force = $true,
-#		[switch]$ForceBootstrap = $true,
-#		[string]$Scope = 'AllUsers'
-#	)
-#
-#	try {
-#		$provider = Get-PackageProvider -Name $ProviderName -ErrorAction SilentlyContinue
-#		if ($provider -and ($provider.Version -ge [version]$MinimumVersion)) {
-#			return $true
-#		}
-#
-#		Install-PackageProvider -Name $ProviderName -MinimumVersion $MinimumVersion -Confirm:$Confirm -Scope $Scope -Force:$Force -ForceBootstrap:$ForceBootstrap -ErrorAction Stop
-#		return $true
-#	} catch {
-#		Write-Error "Failed to install Package Provider $ProviderName. Error: $_"
-#		return $false
-#	}
-#}
-#
-#function Install-NewPSModule {
-#	param (
-#		[string]$ModuleName = 'pposhtools',
-#		[switch]$Force = $true,
-#		[switch]$Confirm = $false,
-#		[string]$Scope = 'AllUsers'
-#	)
-#
-#	try {
-#		$module = Get-Module -ListAvailable -Name $ModuleName -ErrorAction SilentlyContinue
-#		if ($module) {
-#			return $true
-#		}
-#		Install-Module -Name $ModuleName -Force:$Force -Scope $Scope -Confirm:$Confirm -ErrorAction Stop
-#		return $true
-#	} catch {
-#		Write-Error "Failed to install module $ModuleName. Error: $_"
-#		return $false
-#	}
-#}
-
 function Add-Font {
 	# Modified from https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
@@ -108,16 +63,6 @@ if (-not $isAdmin) {
 	Write-Error 'Not running with Admin privileges.'
 	Exit 1
 }
-
-#if (-not (Install-NuGetPackageProvider)) {
-#	Write-Error 'Unable to install Nuget Package Provider'
-#	Exit 1
-#}
-#
-#if (-not (Install-NewPSModule)) {
-#	Write-Error 'Unable to install pposhtools powershell module'
-#	Exit 1
-#}
 
 if (-not (Test-Path -Path $directoryPath -PathType Container)) {
 	try {
