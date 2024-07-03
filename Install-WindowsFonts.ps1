@@ -5,6 +5,20 @@ param (
 	[Parameter(Mandatory=$true)]
 	[string]$DestPath
 )
+class Logger {
+    [string]$LogFilePath
+
+    Logger([string]$logFilePath) {
+        $this.LogFilePath = $logFilePath
+    }
+
+    [void] Log([string]$message) {
+        $timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+        $logEntry = "$timestamp - $message"
+        Add-Content -Path $this.LogFilePath -Value $logEntry
+        Write-Host $logEntry
+    }
+}
 
 function Test-Admin {
 	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
