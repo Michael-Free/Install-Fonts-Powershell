@@ -1,0 +1,150 @@
+function Test-Admin {
+	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+
+	$isAdmin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+	return $isAdmin
+}
+
+#function Install-NuGetPackageProvider {
+#	param (
+#		[string]$ProviderName = 'NuGet',
+#		[string]$MinimumVersion = '2.8.5.201',
+#		[switch]$Confirm = $false,
+#		[switch]$Force = $true,
+#		[switch]$ForceBootstrap = $true,
+#		[string]$Scope = 'AllUsers'
+#	)
+#
+#	try {
+#		$provider = Get-PackageProvider -Name $ProviderName -ErrorAction SilentlyContinue
+#		if ($provider -and ($provider.Version -ge [version]$MinimumVersion)) {
+#			return $true
+#		}
+#
+#		Install-PackageProvider -Name $ProviderName -MinimumVersion $MinimumVersion -Confirm:$Confirm -Scope $Scope -Force:$Force -ForceBootstrap:$ForceBootstrap -ErrorAction Stop
+#		return $true
+#	} catch {
+#		Write-Error "Failed to install Package Provider $ProviderName. Error: $_"
+#		return $false
+#	}
+#}
+#
+#function Install-NewPSModule {
+#	param (
+#		[string]$ModuleName = 'pposhtools',
+#		[switch]$Force = $true,
+#		[switch]$Confirm = $false,
+#		[string]$Scope = 'AllUsers'
+#	)
+#
+#	try {
+#		$module = Get-Module -ListAvailable -Name $ModuleName -ErrorAction SilentlyContinue
+#		if ($module) {
+#			return $true
+#		}
+#		Install-Module -Name $ModuleName -Force:$Force -Scope $Scope -Confirm:$Confirm -ErrorAction Stop
+#		return $true
+#	} catch {
+#		Write-Error "Failed to install module $ModuleName. Error: $_"
+#		return $false
+#	}
+#}
+
+function Add-Font {
+	# Modified from https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
+	param (
+		[Parameter(Mandatory = $true, Position = 0)]
+		[string]$FontPath,
+
+		[Parameter(Mandatory = $false)]
+		[switch]$Force
+	)
+
+	begin {
+		$FontsFolder = "$env:SystemRoot\Fonts"
+		$RegistryPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
+	}
+
+	process {
+		try {
+			$FontName = (Get-Item $FontPath).Name
+			$DestinationPath = Join-Path -Path $FontsFolder -ChildPath $FontName
+
+			if (Test-Path $DestinationPath) {
+				if (-not $Force) {
+					Write-Host "Font $FontName already exists. Use -Force to replace."
+					return
+				} else {
+					Remove-Item $DestinationPath -Force
+				}
+			}
+
+			Copy-Item -Path $FontPath -Destination $DestinationPath -Force
+
+			$fontExtension = [System.IO.Path]::GetExtension($FontName)
+			switch ($fontExtension) {
+				'.ttf' { $FontType = 'TrueType' }
+				'.otf' { $FontType = 'OpenType' }
+				default { throw "Unsupported font extension: $fontExtension" }
+			}
+
+			Set-ItemProperty -Path $RegistryPath -Name $FontName -Value $FontName -Type String
+			Write-Host "Font $FontName installed successfully."
+		} catch {
+			Write-Error "Failed to add font. Error: $_"
+		}
+	}
+}
+
+
+$isAdmin = Test-Admin
+$directoryPath = 'C:\Scripts\Fonts\'
+$remoteFileShare = '\\MyRemoteFile\Share\'
+
+if (-not $isAdmin) {
+	Write-Error 'Not running with Admin privileges.'
+	Exit 1
+}
+
+#if (-not (Install-NuGetPackageProvider)) {
+#	Write-Error 'Unable to install Nuget Package Provider'
+#	Exit 1
+#}
+#
+#if (-not (Install-NewPSModule)) {
+#	Write-Error 'Unable to install pposhtools powershell module'
+#	Exit 1
+#}
+
+if (-not (Test-Path -Path $directoryPath -PathType Container)) {
+	try {
+		New-Item -Path $directoryPath -ItemType Directory -ErrorAction Stop
+	} catch {
+		Write-Error "Failed to create directory. Error: $_"
+		Exit 1
+	}
+}
+
+if (-not (Test-Path -Path $remoteFileShare -PathType Container)) {
+	Write-Error "File Share unavailable"
+	Exit 1
+}
+
+$localFileArray = (Get-ChildItem -Path $directoryPath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
+$remoteFileArray = (Get-ChildItem -Path $remoteFileShare -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
+
+$missingFiles = $remoteFileArray | Where-Object { $localFileArray -NotContains $_ }
+
+if ($missingFiles.count -gt 0) {
+	foreach ($mf in $missingFiles) {
+		Copy-Item -Path "$remoteFileShare\$mf" -Destination "$directoryPath\$mf"
+	}
+}
+
+###
+# previous usage with pposhtools
+#Get-ChildItem -Path \\FileServer\Fonts\ -Directory | ForEach-Object { Add-Font -Path \\fileserver\fonts\$_ } | Out-File -Append -FilePath C:\Scripts\Font-InstallLog.txt
+###
