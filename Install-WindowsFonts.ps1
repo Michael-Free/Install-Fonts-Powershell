@@ -76,36 +76,35 @@ function Add-Font {
 }
 $logger = [Logger]::new("C:\LogFile.txt")
 $logger.Log("Script Start")
+
 $isAdmin = Test-Admin
-$directoryPath = 'C:\Scripts\Fonts\'
-$remoteFileShare = '\\MyRemoteFile\Share\'
 
 if (-not $isAdmin) {
 	Write-Error 'Not running with Admin privileges.'
 	Exit 1
 }
 
-if (-not (Test-Path -Path $directoryPath -PathType Container)) {
+if (-not (Test-Path -Path $DestPath -PathType Container)) {
 	try {
-		New-Item -Path $directoryPath -ItemType Directory -ErrorAction Stop
+		New-Item -Path $DestPath -ItemType Directory -ErrorAction Stop
 	} catch {
 		Write-Error "Failed to create directory. Error: $_"
 		Exit 1
 	}
 }
 
-if (-not (Test-Path -Path $remoteFileShare -PathType Container)) {
+if (-not (Test-Path -Path $SourcePath -PathType Container)) {
 	Write-Error "File Share unavailable"
 	Exit 1
 }
 
-$localFileArray = (Get-ChildItem -Path $directoryPath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
-$remoteFileArray = (Get-ChildItem -Path $remoteFileShare -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
+$destFileArray = (Get-ChildItem -Path $DestPath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
+$sourceFileArray = (Get-ChildItem -Path $SourcePath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
 
-$missingFiles = $remoteFileArray | Where-Object { $localFileArray -NotContains $_ }
+$missingFiles = $sourceFileArray | Where-Object { $destFileArray -NotContains $_ }
 
 if ($missingFiles.count -gt 0) {
 	foreach ($mf in $missingFiles) {
-		Copy-Item -Path "$remoteFileShare\$mf" -Destination "$directoryPath\$mf"
+		Copy-Item -Path "$SourcePath\$mf" -Destination "$DestPath\$mf"
 	}
 }
