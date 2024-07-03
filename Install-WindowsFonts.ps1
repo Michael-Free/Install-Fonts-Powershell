@@ -38,7 +38,7 @@ function Add-Font {
 
 			if (Test-Path $DestinationPath) {
 				if (-not $Force) {
-					Write-Host "Font $FontName already exists. Use -Force to replace."
+					write-output "Font $FontName already exists. Use -Force to replace."
 					return
 				} else {
 					Remove-Item $DestinationPath -Force
@@ -55,7 +55,7 @@ function Add-Font {
 			}
 
 			Set-ItemProperty -Path $RegistryPath -Name $FontName -Value $FontName -Type String
-			Write-Host "Font $FontName installed successfully."
+			write-output "Font $FontName installed successfully."
 		} catch {
 			Write-Error "Failed to add font. Error: $_"
 		}
