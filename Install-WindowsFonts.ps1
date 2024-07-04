@@ -162,4 +162,4 @@ foreach ($font in $sourceFileArray) {
 	Add-Font -FontPath "$DestPath\$font" -Force
 }
 
-## show toast notifications
+Send-ToastNotification -Title "Font Installation Notice" -Message "New fonts have been installed to your system. Please reboot your computer to see them."
