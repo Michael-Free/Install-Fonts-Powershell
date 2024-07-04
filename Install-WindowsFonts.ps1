@@ -82,51 +82,6 @@ function Add-Font {
 	}
 }
 
-function Send-ToastNotification {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$Title,
-
-        [Parameter(Mandatory = $true)]
-        [string]$Message,
-
-        [Parameter(Mandatory = $false)]
-        [string]$ToastHeader = "PowerShell Notification"
-    )
-
-    [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
-    [Windows.UI.Notifications.ToastNotification, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
-    [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime] | Out-Null
-
-    $template = @"
-<toast>
-    <visual>
-        <binding template="ToastText02">
-            <text id="1">$Title</text>
-            <text id="2">$Message</text>
-        </binding>
-    </visual>
-</toast>
-"@
-
-    $template = $template -replace '\$Title', $Title -replace '\$Message', $Message
-
-    $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
-    try {
-        $xml.LoadXml($template)
-    } catch {
-        Write-Error "Failed to load XML: $_"
-        return
-    }
-
-    $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
-
-    try {
-        [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($ToastHeader).Show($toast)
-    } catch {
-        Write-Error "Failed to show toast notification: $_"
-    }
-}
 
 if (-not (Test-Admin)) {
 	Write-Error 'Not running with Admin privileges.'
@@ -169,12 +124,4 @@ foreach ($font in $sourceFileArray) {
 		Write-Error "Unable to add font: $_"
 	}
 	
-}
-
-try {
-	Send-ToastNotification -Title "Font Installation Notice" -Message "New fonts have been installed to your system. Please reboot your computer to see them."
-	Exit 0
-} catch {
-	Write-Error "Unable to Send Toast Notification: $_"
-	Exit 1
 }
