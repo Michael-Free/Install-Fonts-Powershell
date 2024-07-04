@@ -94,12 +94,10 @@ function Send-ToastNotification {
         [string]$ToastHeader = "PowerShell Notification"
     )
 
-    # Ensure the Windows Runtime types are available
     [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
     [Windows.UI.Notifications.ToastNotification, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
     [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime] | Out-Null
 
-    # XML template for the toast notification
     $template = @"
 <toast>
     <visual>
@@ -160,6 +158,8 @@ if ($missingFiles.count -gt 0) {
 	}
 }
 
-## Add the fonts
+foreach ($font in $sourceFileArray) {
+	Add-Font -FontPath "$DestPath\$font" -Force
+}
 
 ## show toast notifications
