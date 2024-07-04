@@ -154,18 +154,27 @@ $missingFiles = $sourceFileArray | Where-Object { $destFileArray -NotContains $_
 
 if ($missingFiles.count -gt 0) {
 	foreach ($mf in $missingFiles) {
-		Copy-Item -Path "$SourcePath\$mf" -Destination "$DestPath\$mf"
+		try {
+			Copy-Item -Path "$SourcePath\$mf" -Destination "$DestPath\$mf"
+		} catch {
+			Write-Error "Unable to copy font to local path: $_"
+		}
 	}
 }
 
 foreach ($font in $sourceFileArray) {
-	Add-Font -FontPath "$DestPath\$font" -Force
+	try {
+		Add-Font -FontPath "$DestPath\$font" -Force
+	} catch {
+		Write-Error "Unable to add font: $_"
+	}
+	
 }
 
 try {
 	Send-ToastNotification -Title "Font Installation Notice" -Message "New fonts have been installed to your system. Please reboot your computer to see them."
 	Exit 0
 } catch {
-	Write-Error "Unable to Send Toast Notifications"
+	Write-Error "Unable to Send Toast Notification: $_"
 	Exit 1
 }
