@@ -19,11 +19,25 @@ class Logger {
         Add-Content -Path $this.LogFilePath -Value $logEntry
     }
 }
-
-#$logpath = ""
 ## Check Logpath
 #$logger = [Logger]::new("C:\LogFile.txt")
 #$logger.Log("Script Start")
+
+$logpath = Join-Path -Path $env:ALLUSERSPROFILE -ChildPath "Font-Install"
+
+if (-Not (Test-Path -Path $logpath -PathType Container)) {
+    try {
+        New-Item -Path $logpath -ItemType Directory -Force
+
+        (Get-Item -Path $logpath).Attributes += 'Hidden'
+
+        write-output "Hidden directory created at: $logpath"
+    } catch {
+        Write-Error "Unable to create logpath directory: $_"
+    }
+} else {
+    Write-Output "The directory '$logpath' already exists."
+}
 
 function Test-Admin {
 	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -35,8 +49,8 @@ function Test-Admin {
 }
 
 function Add-Font {
-	# Modified from https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
-	# https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
+	# Modified from:  https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
+	# Modified from: https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -123,5 +137,4 @@ foreach ($font in $sourceFileArray) {
 	} catch {
 		Write-Error "Unable to add font: $_"
 	}
-	
 }
