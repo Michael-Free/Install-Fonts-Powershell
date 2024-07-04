@@ -111,10 +111,8 @@ function Send-ToastNotification {
 </toast>
 "@
 
-    # Replace placeholders with actual parameters
     $template = $template -replace '\$Title', $Title -replace '\$Message', $Message
 
-    # Load the XML content into a new XmlDocument object
     $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
     try {
         $xml.LoadXml($template)
@@ -123,10 +121,8 @@ function Send-ToastNotification {
         return
     }
 
-    # Create the toast notification
     $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
 
-    # Show the toast notification
     try {
         [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($ToastHeader).Show($toast)
     } catch {
