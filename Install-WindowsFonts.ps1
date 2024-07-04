@@ -19,32 +19,25 @@ class Logger {
         Add-Content -Path $this.LogFilePath -Value $logEntry
     }
 }
-## Check Logpath
-#$logger = [Logger]::new("C:\LogFile.txt")
-#$logger.Log("Script Start")
 
 $logpath = Join-Path -Path $env:ALLUSERSPROFILE -ChildPath "Font-Install"
 
 if (-Not (Test-Path -Path $logpath -PathType Container)) {
     try {
         New-Item -Path $logpath -ItemType Directory -Force
-
         (Get-Item -Path $logpath).Attributes += 'Hidden'
-
-        write-output "Hidden directory created at: $logpath"
     } catch {
         Write-Error "Unable to create logpath directory: $_"
     }
-} else {
-    Write-Output "The directory '$logpath' already exists."
 }
+
+$logger = [Logger]::new("$logpath\fontInstallLogs.txt")
+$logger.Log("Started")
 
 function Test-Admin {
 	$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
 	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
-
 	$isAdmin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-
 	return $isAdmin
 }
 
@@ -72,7 +65,7 @@ function Add-Font {
 
 			if (Test-Path $DestinationPath) {
 				if (-not $Force) {
-					write-output "Font $FontName already exists. Use -Force to replace."
+					$logger.Log("Font $FontName already exists. Use -Force to replace.")
 					return
 				} else {
 					Remove-Item $DestinationPath -Force
@@ -89,16 +82,16 @@ function Add-Font {
 			}
 
 			Set-ItemProperty -Path $RegistryPath -Name $FontName -Value $FontName -Type String
-			write-output "Font $FontName installed successfully."
+			$logger.Log("Font $FontName installed successfully.")
 		} catch {
-			Write-Error "Failed to add font. Error: $_"
+			$logger.Log("Failed to add font. Error: $_")
 		}
 	}
 }
 
 
 if (-not (Test-Admin)) {
-	Write-Error 'Not running with Admin privileges.'
+	$logger.Log("Not running with Admin privileges.")
 	Exit 1
 }
 
@@ -106,27 +99,27 @@ if (-not (Test-Path -Path $DestPath -PathType Container)) {
 	try {
 		New-Item -Path $DestPath -ItemType Directory -ErrorAction Stop
 	} catch {
-		Write-Error "Failed to create directory. Error: $_"
+		$logger.Log("Failed to create destination directory. Error: $_")
 		Exit 1
 	}
 }
 
 if (-not (Test-Path -Path $SourcePath -PathType Container)) {
-	Write-Error "Source Path unavailable"
+	$logger.Log("Source Path unavailable")
 	Exit 1
 }
 
 $destFileArray = (Get-ChildItem -Path $DestPath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
 $sourceFileArray = (Get-ChildItem -Path $SourcePath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
-
 $missingFiles = $sourceFileArray | Where-Object { $destFileArray -NotContains $_ }
 
 if ($missingFiles.count -gt 0) {
 	foreach ($mf in $missingFiles) {
 		try {
 			Copy-Item -Path "$SourcePath\$mf" -Destination "$DestPath\$mf"
+			$logger.Log("Adding $SourcePath\$mf to $DestPath\$mf")
 		} catch {
-			Write-Error "Unable to copy font to local path: $_"
+			$logger.Log("Unable to copy font to local path: $_")
 		}
 	}
 }
@@ -134,7 +127,8 @@ if ($missingFiles.count -gt 0) {
 foreach ($font in $sourceFileArray) {
 	try {
 		Add-Font -FontPath "$DestPath\$font" -Force
+		$logger.Log("Adding font: $font")
 	} catch {
-		Write-Error "Unable to add font: $_"
+		$logger.Log( "Unable to add font $font - $_")
 	}
 }
