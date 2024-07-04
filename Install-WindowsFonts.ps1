@@ -36,6 +36,7 @@ function Test-Admin {
 
 function Add-Font {
 	# Modified from https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
+	# https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -81,6 +82,58 @@ function Add-Font {
 	}
 }
 
+function Send-ToastNotification {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Title,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Message,
+
+        [Parameter(Mandatory = $false)]
+        [string]$ToastHeader = "PowerShell Notification"
+    )
+
+    # Ensure the Windows Runtime types are available
+    [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+    [Windows.UI.Notifications.ToastNotification, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+    [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime] | Out-Null
+
+    # XML template for the toast notification
+    $template = @"
+<toast>
+    <visual>
+        <binding template="ToastText02">
+            <text id="1">$Title</text>
+            <text id="2">$Message</text>
+        </binding>
+    </visual>
+</toast>
+"@
+
+    # Replace placeholders with actual parameters
+    $template = $template -replace '\$Title', $Title -replace '\$Message', $Message
+
+    # Load the XML content into a new XmlDocument object
+    $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
+    try {
+        $xml.LoadXml($template)
+    } catch {
+        Write-Error "Failed to load XML: $_"
+        return
+    }
+
+    # Create the toast notification
+    $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
+
+    # Show the toast notification
+    try {
+        [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($ToastHeader).Show($toast)
+    } catch {
+        Write-Error "Failed to show toast notification: $_"
+    }
+}
+
 if (-not (Test-Admin)) {
 	Write-Error 'Not running with Admin privileges.'
 	Exit 1
@@ -96,7 +149,7 @@ if (-not (Test-Path -Path $DestPath -PathType Container)) {
 }
 
 if (-not (Test-Path -Path $SourcePath -PathType Container)) {
-	Write-Error "File Share unavailable"
+	Write-Error "Source Path unavailable"
 	Exit 1
 }
 
@@ -110,3 +163,7 @@ if ($missingFiles.count -gt 0) {
 		Copy-Item -Path "$SourcePath\$mf" -Destination "$DestPath\$mf"
 	}
 }
+
+## Add the fonts
+
+## show toast notifications
