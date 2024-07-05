@@ -8,7 +8,6 @@
     .DESCRIPTION
 
 
-
     .PARAMETER SourcePath
 	
 	.PARAMETER DestPath
@@ -22,6 +21,9 @@
 	String. (DestPath) - String. blah blah blah
 
 	.OUTPUTS
+	Logs. 
+	This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt". This is a hidden directory, so it won't be readily apparent.
+
 
 	.COMPONENT
     Font Management
