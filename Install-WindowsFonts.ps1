@@ -1,3 +1,23 @@
+<#
+    .SYNOPSIS
+
+    .DESCRIPTION
+
+    .PARAMETER Path
+
+    .EXAMPLE
+
+    .EXAMPLE
+
+    .INPUTS
+
+    .OUTPUTS
+
+    .NOTES
+
+    .LINK
+#>
+
 param (
 	[Parameter(Mandatory=$true)]
 	[string]$SourcePath,
