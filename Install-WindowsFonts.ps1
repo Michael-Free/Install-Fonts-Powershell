@@ -133,7 +133,6 @@ function Add-Font {
 			$fontExtension = [System.IO.Path]::GetExtension($FontName)
 			switch ($fontExtension) {
 				'.ttf' { $FontType = 'TrueType' }
-				'.otf' { $FontType = 'OpenType' }
 				default { throw "Unsupported font extension: $fontExtension" }
 			}
 
