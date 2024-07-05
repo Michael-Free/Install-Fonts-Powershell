@@ -15,12 +15,13 @@
 
 	.EXAMPLE
 	Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\"
-	Will copy fonts from a remote directory to a local directory and proceed to install them. 
+	Will copy fonts from a remote directory to a local directory and proceed to install them. It's assumed that there is access to the remote file share, without premissions.
 
     .INPUTS
-	String. blah blah blah
+	String. (SourcePath) - String. blah blah blah
+	String. (DestPath) - String. blah blah blah
 
-    .OUTPUTS
+	.OUTPUTS
 
 	.COMPONENT
     Font Management
