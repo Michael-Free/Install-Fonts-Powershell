@@ -13,14 +13,18 @@
 
 	.EXAMPLE
 	Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\"
-	Will copy fonts from a remote directory to a local directory and proceed to install them. It's assumed that there is access to the remote file share, without premissions.
+	Will copy fonts from a remote directory to a local directory and proceed to install them.  It's assumed that there is access to the remote file share, without credentials.
+
+	.EXAMPLE
+	Install-WindowFonts.ps1 -SourcePath "D:\MyUSBstick\Fonts\" -DestPath "C:\Scripts\Fonts\"
+	Will copy fonts from an attached drive, like a USB drive, and proceed to install them. It's assumed that there is permissioned access to the attached drive.
 
     .INPUTS
 	String. (SourcePath) - String. blah blah blah
 	String. (DestPath) - String. blah blah blah
 
 	.OUTPUTS
-	This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" if it's ran in administrative mode.
+	This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" (if it's ran in administrative mode).
 	
 	This is a hidden directory, so it won't be readily apparent if you looking through Windows Explorer.
 	
@@ -50,7 +54,9 @@
 	https://blog.simontimms.com/2021/06/11/installing-fonts/
 
 	.NOTES
-	This script requires Administrative Privileges to modify the registry and install the fonts globally.
+	- This script requires Administrative Privileges to modify the registry and install the fonts globally.
+	- If not ran with administrative privileges, logs may be stored in another global directory. Windows userspace is so disjointed, I don't really care anymore #RunBSD.
+	- 
  
 #>
 
