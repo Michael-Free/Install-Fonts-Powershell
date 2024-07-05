@@ -7,7 +7,6 @@
 
     .DESCRIPTION
 
-
     .PARAMETER SourcePath
 	
 	.PARAMETER DestPath
@@ -27,9 +26,10 @@
 	
 	Logging will record timestamps on:
 	- The start of each run
-	- Running with/without administrative privileges
-	- Creation of a new local directory
+	- Running without administrative privileges
+	- Creating of a new local directory (Success/Failure)
 	- Success/Failure of font installation
+	- 
 
 	.COMPONENT
     Font Management
