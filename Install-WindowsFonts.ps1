@@ -182,8 +182,8 @@ if ($missingFiles.count -gt 0) {
 
 foreach ($font in $sourceFileArray) {
 	try {
-		Add-Font -FontPath "$DestPath\$font" -Force
 		$logger.Log("Adding font: $font")
+		Add-Font -FontPath "$DestPath\$font" -Force
 	} catch {
 		$logger.Log( "Unable to add font $font - $_")
 	}
