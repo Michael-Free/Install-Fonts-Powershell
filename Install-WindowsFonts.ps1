@@ -42,7 +42,7 @@ function Test-Admin {
 }
 
 function Add-Font {
-	# Modified from:  https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
+	# Modified from: https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
 	# Modified from: https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 	param (
@@ -109,8 +109,8 @@ if (-not (Test-Path -Path $SourcePath -PathType Container)) {
 	Exit 1
 }
 
-$destFileArray = (Get-ChildItem -Path $DestPath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
-$sourceFileArray = (Get-ChildItem -Path $SourcePath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Ascending
+$destFileArray = (Get-ChildItem -Path $DestPath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Descending
+$sourceFileArray = (Get-ChildItem -Path $SourcePath -File).Name | Where-Object { $_ -like '*.ttf' } | Sort-Object -Descending
 $missingFiles = $sourceFileArray | Where-Object { $destFileArray -NotContains $_ }
 
 if ($missingFiles.count -gt 0) {
