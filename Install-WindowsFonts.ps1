@@ -1,21 +1,48 @@
 <#
-    .SYNOPSIS
+	.SYNOPSIS
+	Installs fonts globally on Windows 10 and Windows 11.
+
+	.ROLE
+    Installs and registers fonts on a Windows system for all users on a system.
 
     .DESCRIPTION
 
-    .PARAMETER Path
 
-    .EXAMPLE
 
-    .EXAMPLE
+    .PARAMETER SourcePath
+	
+	.PARAMETER DestPath
+
+	.EXAMPLE
+	Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\"
+	Will copy fonts from a remote directory to a local directory and proceed to install them. 
 
     .INPUTS
+	String. blah blah blah
 
     .OUTPUTS
 
-    .NOTES
+	.COMPONENT
+    Font Management
+
+    .FUNCTIONALITY
+    Font Installation
 
     .LINK
+	https://github.com/Michael-Free/Install-Fonts-Powershell
+	
+	.LINK
+	https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
+
+	.LINK
+	https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
+
+	.LINK
+	https://blog.simontimms.com/2021/06/11/installing-fonts/
+
+	.NOTES
+	This script requires Administrative Privileges to modify the registry and install the fonts globally.
+ 
 #>
 
 param (
