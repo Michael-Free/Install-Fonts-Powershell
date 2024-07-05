@@ -21,8 +21,15 @@
 	String. (DestPath) - String. blah blah blah
 
 	.OUTPUTS
-	Logs. 
-	This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt". This is a hidden directory, so it won't be readily apparent.
+	This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" if it's ran in administrative mode.
+	
+	This is a hidden directory, so it won't be readily apparent if you looking through Windows Explorer.
+	
+	Logging will record timestamps on:
+	- The start of each run
+	- Success/Failure of font installation
+	- Running with/without administrative privileges
+	- 
 
 
 	.COMPONENT
