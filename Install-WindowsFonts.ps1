@@ -27,10 +27,9 @@
 	
 	Logging will record timestamps on:
 	- The start of each run
-	- Success/Failure of font installation
 	- Running with/without administrative privileges
-	- 
-
+	- Creation of a new local directory
+	- Success/Failure of font installation
 
 	.COMPONENT
     Font Management
@@ -155,6 +154,7 @@ if (-not (Test-Admin)) {
 if (-not (Test-Path -Path $DestPath -PathType Container)) {
 	try {
 		New-Item -Path $DestPath -ItemType Directory -ErrorAction Stop
+		$logger.Log("Created new directory in $DestPath")
 	} catch {
 		$logger.Log("Failed to create destination directory. Error: $_")
 		Exit 1
