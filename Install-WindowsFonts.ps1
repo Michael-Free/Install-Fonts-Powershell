@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-	Installs fonts globally on Windows 10 and Windows 11.
+    Installs fonts globally on Windows 10 and Windows 11.
 
     .ROLE
     Installs and registers fonts on a Windows system for all users on a system.
