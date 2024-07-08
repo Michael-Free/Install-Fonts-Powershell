@@ -1,21 +1,21 @@
 <#
-	.SYNOPSIS
+    .SYNOPSIS
 	Installs fonts globally on Windows 10 and Windows 11.
 
-	.ROLE
+    .ROLE
     Installs and registers fonts on a Windows system for all users on a system.
 
     .DESCRIPTION
 
     .PARAMETER SourcePath
 	
-	.PARAMETER DestPath
+    .PARAMETER DestPath
 
-	.EXAMPLE
+    .EXAMPLE
 	Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\"
 	Will copy fonts from a remote directory to a local directory and proceed to install them.  It's assumed that there is access to the remote file share, without credentials.
 
-	.EXAMPLE
+    .EXAMPLE
 	Install-WindowFonts.ps1 -SourcePath "D:\MyUSBstick\Fonts\" -DestPath "C:\Scripts\Fonts\"
 	Will copy fonts from an attached drive, like a USB drive, and proceed to install them. It's assumed that there is permissioned access to the attached drive.
 
@@ -23,7 +23,7 @@
 	String. (SourcePath) - String. blah blah blah
 	String. (DestPath) - String. blah blah blah
 
-	.OUTPUTS
+    .OUTPUTS
 	This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" (if it's ran in administrative mode).
 	
 	This is a hidden directory, so it won't be readily apparent if you looking through Windows Explorer.
@@ -38,10 +38,10 @@
 	.COMPONENT
     Font Management
 
-    .FUNCTIONALITY
+	.FUNCTIONALITY
     Font Installation
 
-    .LINK
+	.LINK
 	https://github.com/Michael-Free/Install-Fonts-Powershell
 	
 	.LINK
