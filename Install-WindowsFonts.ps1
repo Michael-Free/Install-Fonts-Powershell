@@ -12,28 +12,28 @@
     .PARAMETER DestPath
 
     .EXAMPLE
-	Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\"
-	Will copy fonts from a remote directory to a local directory and proceed to install them.  It's assumed that there is access to the remote file share, without credentials.
+    Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\"
+    Will copy fonts from a remote directory to a local directory and proceed to install them.  It's assumed that there is access to the remote file share, without credentials.
 
     .EXAMPLE
-	Install-WindowFonts.ps1 -SourcePath "D:\MyUSBstick\Fonts\" -DestPath "C:\Scripts\Fonts\"
-	Will copy fonts from an attached drive, like a USB drive, and proceed to install them. It's assumed that there is permissioned access to the attached drive.
+    Install-WindowFonts.ps1 -SourcePath "D:\MyUSBstick\Fonts\" -DestPath "C:\Scripts\Fonts\"
+    Will copy fonts from an attached drive, like a USB drive, and proceed to install them. It's assumed that there is permissioned access to the attached drive.
 
     .INPUTS
-	String. (SourcePath) - String. blah blah blah
-	String. (DestPath) - String. blah blah blah
+    String. (SourcePath) - String. blah blah blah
+    String. (DestPath) - String. blah blah blah
 
     .OUTPUTS
-	This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" (if it's ran in administrative mode).
+    This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" (if it's ran in administrative mode).
 	
-	This is a hidden directory, so it won't be readily apparent if you looking through Windows Explorer.
+    This is a hidden directory, so it won't be readily apparent if you looking through Windows Explorer.
 	
-	Logging will record timestamps on:
-	- The start of each run
-	- Running without administrative privileges
-	- Creating of a new local directory (Success/Failure)
-	- Success/Failure of font installation
-	- 
+    Logging will record timestamps on:
+    - The start of each run
+    - Running without administrative privileges
+    - Creating of a new local directory (Success/Failure)
+    - Success/Failure of font installation
+    - 
  
     .COMPONENT
     Font Management
@@ -42,21 +42,21 @@
     Font Installation
 
     .LINK
-	https://github.com/Michael-Free/Install-Fonts-Powershell
+    https://github.com/Michael-Free/Install-Fonts-Powershell
 	
     .LINK
-	https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
+    https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
 
     .LINK
-	https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
+    https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
 
     .LINK
-	https://blog.simontimms.com/2021/06/11/installing-fonts/
+    https://blog.simontimms.com/2021/06/11/installing-fonts/
 
     .NOTES
-	- This script requires Administrative Privileges to modify the registry and install the fonts globally.
-	- If not ran with administrative privileges, logs may be stored in another global directory. Windows userspace is so disjointed, I don't really care anymore #RunBSD.
-	- 
+    - This script requires Administrative Privileges to modify the registry and install the fonts globally.
+    - If not ran with administrative privileges, logs may be stored in another global directory. Windows userspace is so disjointed, I don't really care anymore #RunBSD.
+    - 
  
 #>
 
