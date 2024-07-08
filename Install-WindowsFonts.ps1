@@ -28,8 +28,9 @@
     Will copy fonts from an attached drive, like a USB drive, and proceed to install them. It's assumed that there is permissioned access to the attached drive.
 
     .INPUTS
-    String. (SourcePath) - String. blah blah blah
-    String. (DestPath) - String. blah blah blah
+    String. (SourcePath) -This is the directory where the fonts to be installed exist. This is typically a remote directory, or an attached drive that contains the source font files.
+    String. (DestPath) - This is the temporary directory where fonts will be copied to the local machine for installation. This can exist in a `$env:TEMP` directory, or elsewhere (ie. `C:\Scripts\Fonts\`) before they're installed to the local system.  For all intents and purposes, it is best to consider this a "staging" directory.
+
 
     .OUTPUTS
     This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" (if it's ran in administrative mode).
