@@ -55,7 +55,7 @@
 
     .NOTES
     - This script requires Administrative Privileges to modify the registry and install the fonts globally.
-    - If not ran with administrative privileges, logs may be stored in another global directory. Windows userspace is so disjointed, I don't really care anymore #RunBSD.
+    - If not ran with administrative privileges, logs may be stored in another global directory.
     - 
  
 #>
@@ -150,7 +150,6 @@ function Add-Font {
 	}
 }
 
-
 if (-not (Test-Admin)) {
 	$logger.Log("Not running with Admin privileges.")
 	Exit 1
@@ -191,6 +190,6 @@ foreach ($font in $sourceFileArray) {
 		$logger.Log("Adding font: $font")
 		Add-Font -FontPath "$DestPath\$font" -Force
 	} catch {
-		$logger.Log( "Unable to add font $font - $_")
+		$logger.Log("Unable to add font $font - $_")
 	}
 }
