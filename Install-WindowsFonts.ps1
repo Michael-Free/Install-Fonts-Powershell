@@ -1,11 +1,16 @@
 <#
     .SYNOPSIS
-    Installs fonts globally on Windows 10 and Windows 11.
+    Installs fonts globally on Windows 10 and Windows 11. Reboots are required for the fonts to be registered on a system.
 
     .ROLE
     Installs and registers fonts on a Windows system for all users on a system.
 
     .DESCRIPTION
+    This script will install fonts on a Windows 10/11 system and register them for use by all users on a system (after a reboot).
+
+    Fonts are no longer installed in the "old way" where fonts were merely copied over to `C:\Windows\Fonts\`.  This changed around Windows 10 1803. Fonts are now copied to `C:\Windows\Fonts\`, but they also have to be added to the registry. 
+    
+	For context, this script is intended to be used in an Active Directory situation via Group Policy Objects. Typically fonts will be copied over from a fileshare to a local machine, and installed from there. This script will work outside of this use case however
 
     .PARAMETER SourcePath
 	
