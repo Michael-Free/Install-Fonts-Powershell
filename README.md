@@ -20,7 +20,7 @@ Will copy fonts from a remote directory to a local directory and proceed to inst
 Will copy fonts from an attached drive, like a USB drive, and proceed to install them. (It's assumed that there is permissioned access to the attached drive.)
 
 ## Why?
-Fonts are no longer installed in the "old way" where fonts were merely copied over to `C:\Windows\Fonts\`.  This changed around Windows 10 1803. Fonts are now copied to `C:\Windows\Fonts\`, but they also have to be added to the registry. 
+Gone are the days when you could just casually drop your fonts into `C:\Windows\Fonts\` and call it a day. Nope, Microsoft had to mess things up around Windows 10 1803. Now, you still throw your fonts into `C:\Windows\Fonts\` - then you also need to coax the registry into recognizing them.
 
 It has become so unpredicatble in how Windows works, I'm certain this script will provide some clarity and usability when trying to implement this yourself in a real-world situation... Until is changes again with no clarity or documentation.  Some people need to get their work done without these infuriating caveats.
 
