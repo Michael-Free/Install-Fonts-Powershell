@@ -10,15 +10,18 @@
 
     Fonts are no longer installed in the "old way" where fonts were merely copied over to `C:\Windows\Fonts\`.  This changed around Windows 10 1803. Fonts are now copied to `C:\Windows\Fonts\`, but they also have to be added to the registry. 
     
-	For context, this script is intended to be used in an Active Directory situation via Group Policy Objects. Typically fonts will be copied over from a fileshare to a local machine, and installed from there. This script will work outside of this use case however
+	For context, this script is intended to be used in an Active Directory situation via Group Policy Objects. Typically fonts will be copied over from a fileshare to a local machine, and installed from there. This script will work outside of this use case, however it may not be the intended audience.
+
+    While other font formats may work, only *.ttf type fonts are tested and offically supported.
 
     .PARAMETER SourcePath
+    This is the directory where the fonts to be installed exist. This is typically a remote directory, or an attached drive that contains the source font files.
 	
     .PARAMETER DestPath
+    This is the temporary directory where fonts will be copied to the local machine for installation. This can exist in a `$env:TEMP` directory, or elsewhere (ie. `C:\Scripts\Fonts\`) before they're installed to the local system.  For all intents and purposes, it is best to consider this a "staging" directory.
 
     .EXAMPLE
-    Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\"
-    Will copy fonts from a remote directory to a local directory and proceed to install them.  It's assumed that there is access to the remote file share, without credentials.
+    Install-WindowsFonts.ps1 -SourcePath "\\MyFileserver\RemoteShare\Fonts\" -DestPath "C:\Scripts\Fonts\" Will copy fonts from a remote directory to a local directory and proceed to install them.  It's assumed that there is access to the remote file share, without credentials.
 
     .EXAMPLE
     Install-WindowFonts.ps1 -SourcePath "D:\MyUSBstick\Fonts\" -DestPath "C:\Scripts\Fonts\"
@@ -32,13 +35,6 @@
     This script has verbose logging.  Logs are stored in "C:\ProgramData\Font-Install\fontInstallLogs.txt" (if it's ran in administrative mode).
 	
     This is a hidden directory, so it won't be readily apparent if you looking through Windows Explorer.
-	
-    Logging will record timestamps on:
-    - The start of each run
-    - Running without administrative privileges
-    - Creating of a new local directory (Success/Failure)
-    - Success/Failure of font installation
-    - 
  
     .COMPONENT
     Font Management
@@ -61,7 +57,8 @@
     .NOTES
     - This script requires Administrative Privileges to modify the registry and install the fonts globally.
     - If not ran with administrative privileges, logs may be stored in another global directory.
-    - 
+    - Only true type fonts are officially supported.
+	- 
  
 #>
 
