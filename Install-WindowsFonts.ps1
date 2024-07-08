@@ -34,26 +34,26 @@
 	- Creating of a new local directory (Success/Failure)
 	- Success/Failure of font installation
 	- 
-
-	.COMPONENT
+ 
+    .COMPONENT
     Font Management
 
-	.FUNCTIONALITY
+    .FUNCTIONALITY
     Font Installation
 
-	.LINK
+    .LINK
 	https://github.com/Michael-Free/Install-Fonts-Powershell
 	
-	.LINK
+    .LINK
 	https://www.reddit.com/r/PowerShell/comments/zk8w09/deploying_font_for_all_users/
 
-	.LINK
+    .LINK
 	https://github.com/PPOSHGROUP/PPoShTools/blob/master/PPoShTools/Public/FileSystem/Add-Font.ps1
 
-	.LINK
+    .LINK
 	https://blog.simontimms.com/2021/06/11/installing-fonts/
 
-	.NOTES
+    .NOTES
 	- This script requires Administrative Privileges to modify the registry and install the fonts globally.
 	- If not ran with administrative privileges, logs may be stored in another global directory. Windows userspace is so disjointed, I don't really care anymore #RunBSD.
 	- 
